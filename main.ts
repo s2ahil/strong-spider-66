@@ -19,7 +19,7 @@ const styles = `
   }
 `;
 
-const template = await Deno.readTextFile("template.html");
+const template = await Deno.readTextFile("./index.html");
 
 const router = new Router();
 router
