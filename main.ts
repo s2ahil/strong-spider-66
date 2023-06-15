@@ -41,7 +41,9 @@ router.get("/", async (context) => {
   } else {
     text = await getRandomJoke();
     await kv.set("joke", text);
+    await kv.set("likes", 0);
   }
+  const likes = await kv.get("likes");
   context.response.body = `<!DOCTYPE html>
     <html>
     <head>
@@ -50,8 +52,17 @@ router.get("/", async (context) => {
     </head>
     <body>
       ${text}
+      <br>
+      <button onclick="fetch('/like', { method: 'POST' }).then(() => location.reload())">Like</button>
+      <p>Likes: ${likes}</p>
     </body>
     </html>`;
+});
+
+router.post("/like", async (context) => {
+  const likes = await kv.get("likes");
+  await kv.set("likes", likes + 1);
+  context.response.status = 200;
 });
 
 const app = new Application();
