@@ -5,7 +5,8 @@ const router = new Router();
 router
   
   .get("/", async (context) => {
-    const res = await fetch("https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit");
+    const res = await fetch("https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=twopart
+");
     const jokes = await res.json();
     context.response.body = jokes;
   })
