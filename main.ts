@@ -33,9 +33,7 @@ router
 </body>
 </html>`;
   })
-  .get("/api/random", async (context) => {
-    // ...
-  });
+
 
 const app = new Application();
 app.use(oakCors());  
