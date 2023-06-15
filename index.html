@@ -1,0 +1,20 @@
+<!-- template.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <style>${styles}</style> 
+</head>
+<body>
+  <h1>{{joke.delivery}}</h1>
+  <p>{{joke.setup}}</p>
+  <button onclick="getNextJoke()">Next Joke</button>
+  <script>
+    async function getNextJoke() {
+      const res = await fetch("https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=twopart");
+      const joke = await res.json();
+      document.querySelector("h1").textContent = joke.delivery;
+      document.querySelector("p").textContent = joke.setup;
+    }
+  </script>
+</body>
+</html>
