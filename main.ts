@@ -7,7 +7,9 @@ router
   .get("/", async (context) => {
     const res = await fetch("https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=twopart");
     const jokes = await res.json();
-    context.response.body = jokes;
+   let html = `<h1>Here is a programming joke:</h1>`;
+    html += `<p>${jokes.setup} <em>${jokes.delivery}</em></p>`;
+    context.response.body = html;
   })
   .get("/api/random", async (context) => {
     const res = await fetch("https://official-joke-api.appspot.com/jokes/random");
