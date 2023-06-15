@@ -12,6 +12,7 @@ const styles = `
     height:100vh;
     font-weight: 900;
     color: black;
+    font-size: 1em;
   }
   h1 {
     color: blue;
