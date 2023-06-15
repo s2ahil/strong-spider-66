@@ -5,6 +5,7 @@ const styles = `
   body {
     font-family: sans-serif;
     display:flex;
+    flex-direction:column;
     justify-content:center;
     align-items:center;
     height:100vh;
