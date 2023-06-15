@@ -7,18 +7,20 @@ router
   .get("/", async (context) => {
     const res = await fetch("https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=twopart");
     const jokes = await res.json();
-   let html = `<h1>Here is a programming joke:</h1>`;
-    html += `<p>${jokes.setup} <em>${jokes.delivery}</em></p>`;
-    context.response.body = html;
+    let text = jokes.setup.replace(/<.*?>/g, '');
+    text += ` ${jokes.delivery}`;
+    context.response.body = text;
   })
   .get("/api/random", async (context) => {
     const res = await fetch("https://official-joke-api.appspot.com/jokes/random");
     const randomJoke = await res.json();
-    context.response.body = randomJoke;
+    let text = randomJoke.setup.replace(/<.*?>/g, '');
+    text += ` ${randomJoke.punchline}`;
+    context.response.body = text;
   });
 
 const app = new Application();
-app.use(oakCors()); 
+app.use(oakCors());  
 app.use(router.routes());
 app.use(router.allowedMethods());
 
