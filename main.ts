@@ -8,7 +8,7 @@ router
     const res = await fetch("https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=twopart");
     const jokes = await res.json();
     let text = jokes.setup.replace(/<.*?>/g, '');
-    text += ` ${jokes.delivery}`;
+    text += `\n ${jokes.delivery}`;
     context.response.body = text;
   })
   .get("/api/random", async (context) => {
