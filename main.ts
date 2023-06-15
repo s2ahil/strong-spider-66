@@ -10,6 +10,8 @@ const styles = `
     justify-content:center;
     align-items:center;
     height:100vh;
+    font-weight: 900;
+    color: black;
   }
   h1 {
     color: blue;
