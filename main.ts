@@ -1,5 +1,7 @@
 import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
+import { KV } from "https://deno.land/x/denokv/mod.ts";
+
 const styles = `
   body {
     background-color:#86EFAC;
@@ -19,27 +21,41 @@ const styles = `
 `;
 
 const router = new Router();
-router
-  
-  .get("/", async (context) => {
-    const res = await fetch("https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=twopart");
-    const jokes = await res.json();
-    let text = jokes.setup.replace(/<.*?>/g, '');
-    text += `\n\n<h1>${jokes.delivery}</h1>`;
-    context.response.body = `<!DOCTYPE html>
-<html>
-<head>
-  <style>${styles}</style> 
-</head>
-<body>
-  ${text}
-</body>
-</html>`;
-  })
+const kv = new KV("jokes");
 
+async function getRandomJoke() {
+  const res = await fetch(
+    "https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=twopart",
+  );
+  const jokes = await res.json();
+  let text = jokes.setup.replace(/<.*?>/g, "");
+  text += `\n\n<h1>${jokes.delivery}</h1>`;
+  return text;
+}
+
+router.get("/", async (context) => {
+  let text;
+  const storedJoke = await kv.get("joke");
+  if (storedJoke) {
+    text = storedJoke;
+  } else {
+    text = await getRandomJoke();
+    await kv.set("joke", text);
+  }
+  context.response.body = `<!DOCTYPE html>
+    <html>
+    <head>
+      <style>${styles}</style> 
+      <meta http-equiv="refresh" content="15">
+    </head>
+    <body>
+      ${text}
+    </body>
+    </html>`;
+});
 
 const app = new Application();
-app.use(oakCors());  
+app.use(oakCors());
 app.use(router.routes());
 app.use(router.allowedMethods());
 
