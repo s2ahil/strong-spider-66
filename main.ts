@@ -3,7 +3,12 @@ import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
 
 const router = new Router();
 router
-  .get("/", async (context) => {
+  .get("/", (context) => {
+    context.response.body = `
+      <h1>Welcome to joke API!</h1>
+    `;
+  })
+  .get("/api", async (context) => {
     const res = await fetch("https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit");
     const joke = await res.json();
     let html = `<h1>Here is a programming joke:</h1>`;
@@ -23,4 +28,6 @@ router
 const app = new Application();
 app.use(oakCors());  
 app.use(router.routes());
-app.use(router
+app.use(router.allowedMethods()); 
+
+await app.listen({ port: 8000 });
