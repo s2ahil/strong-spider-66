@@ -4,7 +4,10 @@ import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
 const styles = `
   body {
     font-family: sans-serif;
-    color: #333;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
   }
   h1 {
     color: blue;
