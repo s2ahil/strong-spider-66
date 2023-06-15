@@ -3,11 +3,6 @@ import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
 
 const router = new Router();
 router
-  // .get("/", (context) => {
-  //   context.response.body = `
-  //     <h1>Welcome to joke API!</h1>
-  //   `;
-  // })
   .get("/", async (context) => {
     const res = await fetch("https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit");
     const joke = await res.json();
