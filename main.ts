@@ -19,25 +19,32 @@ const styles = `
   }
 `;
 
+const template = await Deno.readTextFile("template.html");
+
 const router = new Router();
 router
   
   .get("/", async (context) => {
-    const res = await fetch("https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=twopart");
-    const jokes = await res.json();
-    let text = jokes.setup.replace(/<.*?>/g, '');
-    text += `\n\n<h1>${jokes.delivery}</h1>`;
-    context.response.body = `<!DOCTYPE html>
+    try {
+      const res = await fetch("https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=twopart");
+      const jokes = await res.json();
+      const html = template
+        .replace("{{joke.setup}}", jokes.setup)
+        .replace("{{joke.delivery}}", jokes.delivery);
+      context.response.body = html; 
+    } catch (err) {
+      context.response.body = `<!DOCTYPE html>
 <html>
 <head>
   <style>${styles}</style> 
 </head>
 <body>
-  ${text}
+  <h1>Sorry, the joke API seems to be down. Here's a default joke:</h1>
+  <p>Why do programmers always mix up Halloween and Christmas? Because OCT 31 == DEC 25!</p> 
 </body>
 </html>`;
+    }
   })
-
 
 const app = new Application();
 app.use(oakCors());  
