@@ -1,42 +1,52 @@
-import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
-import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
+import { Application, Router } from "https://deno.land/x/oak/mod.ts";
+import { oakCors } from "https://deno.land/x/cors/mod.ts";
+
+const marqueeItems = await fetch("https://raw.githubusercontent.com/davakh/top-marquee/main/marquee-items.json").then(response => response.json());
+
 const styles = `
   body {
-    background-color:#86EFAC;
-    font-family: sans-serif;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    font-weight: 900;
-    color: black;
-    font-size: 1em;
+    background-color: #1e1e1e;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
   }
+
   h1 {
-    color: blue;
+    font-size: 1.5rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .marquee {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    height: 50px;
+    margin: 10px 0;
+  }
+
+  .marquee-item {
+    margin-right: 30px;
   }
 `;
 
 const router = new Router();
-router
-  
-  .get("/", async (context) => {
-    const res = await fetch("https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=twopart");
-    const jokes = await res.json();
-    let text = jokes.setup.replace(/<.*?>/g, '');
-    text += `\n\n<h1>${jokes.delivery}</h1>`;
-    context.response.body = `<!DOCTYPE html>
-<html>
-<head>
-  <style>${styles}</style> 
-</head>
-<body>
-  ${text}
-</body>
-</html>`;
-  })
 
+router.get("/", (context) => {
+  context.response.body = `<!DOCTYPE html>
+    <html>
+    <head>
+      <style>${styles}</style> 
+    </head>
+    <body>
+      <h1>Top Marquee Items</h1>
+      <div class="marquee">
+        ${marqueeItems.map(item => `<div class="marquee-item">${item}</div>`).join("")}
+      </div>
+    </body>
+    </html>`;
+});
 
 const app = new Application();
 app.use(oakCors());  
