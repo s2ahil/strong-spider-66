@@ -2,7 +2,7 @@ import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { oakCors } from "https://deno/x/cors@v1.2.2/mod.ts";
 import { open, DB } from "https://deno.land/x/sqlite/mod.ts";
 import { existsSync } from "https://deno.land/std/fs/mod.ts";
-import { config } from "https://deno.land/x/dotenv/mod.ts";
+
 
 const styles = `
   body {
